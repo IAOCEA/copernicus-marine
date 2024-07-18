@@ -12,7 +12,6 @@ RUN useradd --uid 1000 -U -G ssl-cert,postgres pgstac
 COPY ./requirements.txt requirements.txt
 RUN pip install --root-user-action ignore --upgrade pip
 RUN pip install --root-user-action ignore --no-cache-dir --upgrade -r requirements.txt
-RUN pip uninstall -y --root-user-action ignore orjson
 
 # setup environment variables
 # - pgstac settings needed to connect to the database
