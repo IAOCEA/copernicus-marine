@@ -1,6 +1,7 @@
-from copernicusmarine.catalogue_parser import catalogue_parser
-import pystac
 import asyncio
+
+import pystac
+from copernicusmarine.catalogue_parser import catalogue_parser
 
 loop = asyncio.get_event_loop()
 
