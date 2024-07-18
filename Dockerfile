@@ -36,6 +36,7 @@ ENV APP_HOST 0.0.0.0
 ENV APP_PORT 9588
 
 # configure and populate the database
+RUN mkdir /app; chown pgstac:pgstac /app
 COPY --chown=pgstac ingest.py /app
 COPY --chown=pgstac --chmod=0755 setup-database.sh /app
 WORKDIR /app
