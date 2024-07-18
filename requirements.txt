@@ -1,0 +1,5 @@
+copernicusmarine
+stac-fastapi.pgstac[server]
+pypgstac[psycopg]
+pystac
+rich
