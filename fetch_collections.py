@@ -4,6 +4,8 @@ import pystac
 from copernicusmarine.catalogue_parser import catalogue_parser
 
 loop = asyncio.get_event_loop()
+# don't use orjson when saving items
+pystac.stac_io.orjson = None
 
 
 async def fetch_catalog(staging=False):
