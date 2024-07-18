@@ -37,17 +37,17 @@ ENV APP_PORT 9588
 
 # configure and populate the database
 RUN mkdir /app; chown pgstac:pgstac /app
-COPY --chown=pgstac ingest.py /app
-COPY --chown=pgstac fetch_collections.py /app
-COPY --chown=pgstac --chmod=0755 setup-database.sh /app
+COPY --chown=pgstac ingest.py /app/
+COPY --chown=pgstac fetch_collections.py /app/
+COPY --chown=pgstac --chmod=0755 setup-database.sh /app/
 WORKDIR /app
 RUN ./setup-database.sh
 
 # run the postgresql database and the stac server
 COPY --chown=pgstac supervisord.conf /etc/supervisor/supervisord.conf
-COPY --chown=pgstac --chmod=0755 run-supervisor.sh /app
-COPY --chown=pgstac --chmod=0755 run-postgresql.sh /app
-COPY --chown=pgstac --chmod=0755 run-stacserver.sh /app
+COPY --chown=pgstac --chmod=0755 run-supervisor.sh /app/
+COPY --chown=pgstac --chmod=0755 run-postgresql.sh /app/
+COPY --chown=pgstac --chmod=0755 run-stacserver.sh /app/
 RUN chown -R pgstac:pgstac /var/run/postgresql \
     && chown -R pgstac:pgstac /var/lib/postgresql/15/main
 
