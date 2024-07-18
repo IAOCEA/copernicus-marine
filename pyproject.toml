@@ -1,0 +1,35 @@
+[tool.ruff]
+builtins = ["ellipsis"]
+exclude = [
+    ".git",
+    ".eggs",
+    "__pycache__",
+]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+ignore = [
+    "E402", # module level import not at top of file
+    "E501", # line too long - let black worry about that
+    "E731", # do not assign a lambda expression, use a def
+]
+select = [
+    "F",  # Pyflakes
+    "E",  # Pycodestyle
+    "I",  # isort
+    "UP", # Pyupgrade
+    "TID", # tidy imports
+]
+extend-safe-fixes = [
+    "TID252",  # absolute imports
+]
+fixable = ["I", "TID"]
+
+
+[tool.ruff.lint.isort]
+known-third-party = []
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Disallow all relative imports.
+ban-relative-imports = "all"
