@@ -45,7 +45,10 @@ cat = pystac.Catalog(
     id="MDS",
     catalog_type=pystac.CatalogType.SELF_CONTAINED,
     title="Copernicus Marine Data Store",
-    description="Data from the Copernicus Marine Data Store, in Analysis-Ready, Cloud-Optimised (ARCO) format.",
+    description=(
+        "Data from the Copernicus Marine Data Store, in Analysis-Ready, "
+        "Cloud-Optimised (ARCO) format."
+    ),
 )
 cat.add_children(combine_collections(children))
 cat.normalize_and_save(root_href="MDS")
