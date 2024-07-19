@@ -4,8 +4,6 @@ import pystac
 from copernicusmarine.catalogue_parser import catalogue_parser
 
 loop = asyncio.get_event_loop()
-# don't use orjson when saving items
-pystac.stac_io.orjson = None
 
 
 async def fetch_catalog(staging=False):
@@ -19,6 +17,17 @@ async def fetch_catalog(staging=False):
 children = list(loop.run_until_complete(fetch_catalog(staging=False)))
 
 
+def fix_item(item):
+    variables = item.properties.get("cube:variables")
+    if variables is None:
+        return item
+
+    for var in variables.values():
+        var.pop("missingValue", None)
+
+    return item
+
+
 def combine_collections(children):
     for col, items in children:
         new_col = col.clone()
@@ -28,7 +37,7 @@ def combine_collections(children):
         new_col.remove_links(pystac.RelType.PARENT)
         new_col.remove_links(pystac.RelType.ITEM)
 
-        new_col.add_items(items)
+        new_col.add_items([fix_item(item) for item in items])
         yield new_col
 
 
