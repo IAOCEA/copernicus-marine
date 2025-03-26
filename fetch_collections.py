@@ -1,9 +1,11 @@
 import asyncio
 
 import pystac
+from cmems_stac.conventions import FormatError, ParserError, parse_collection_id
 from copernicusmarine.catalogue_parser import catalogue_parser
+from rich.console import Console
 
-loop = asyncio.get_event_loop()
+console = Console()
 
 
 async def fetch_catalog(staging=False):
@@ -14,7 +16,7 @@ async def fetch_catalog(staging=False):
     return children
 
 
-children = list(loop.run_until_complete(fetch_catalog(staging=False)))
+children = list(asyncio.run(fetch_catalog(staging=False)))
 
 
 def fix_item(item):
@@ -28,9 +30,22 @@ def fix_item(item):
     return item
 
 
+def fix_collection(col):
+    try:
+        info = parse_collection_id(col.id)
+        col.extra_fields.update(info.to_stac())
+    except ParserError:
+        console.log(f"unknown collection id format: {col.id}")
+    except FormatError:
+        pass
+        # console.log(f"could not extract stac properties: {col.id}")
+
+    return col
+
+
 def combine_collections(children):
     for col, items in children:
-        new_col = col.clone()
+        new_col = fix_collection(col.clone())
 
         new_col.remove_links(pystac.RelType.SELF)
         new_col.remove_links(pystac.RelType.ROOT)

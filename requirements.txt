@@ -3,3 +3,4 @@ stac-fastapi.pgstac[server]
 pypgstac[psycopg]
 pystac
 rich
+git+https://github.com/iaocea/cmems-stac.git

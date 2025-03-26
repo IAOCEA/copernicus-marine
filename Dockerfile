@@ -1,9 +1,9 @@
-FROM python:3.11-slim as base
+FROM python:3.12-slim as base
 
 # install postgres and postgis
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y sudo postgresql postgis supervisor
+    apt-get install -y sudo postgresql postgis supervisor git
 
 # add a dedicated user
 RUN useradd --uid 1000 -U -G ssl-cert,postgres pgstac
