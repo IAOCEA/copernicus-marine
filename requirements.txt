@@ -1,4 +1,4 @@
-copernicusmarine
+copernicusmarine<2
 stac-fastapi.pgstac[server]
 pypgstac[psycopg]
 pystac
