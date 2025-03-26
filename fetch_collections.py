@@ -1,4 +1,5 @@
 import asyncio
+from urllib.parse import urlsplit, urlunsplit
 
 import pystac
 from cmems_stac.conventions import FormatError, ParserError, parse_collection_id
@@ -19,6 +20,13 @@ async def fetch_catalog(staging=False):
 children = list(asyncio.run(fetch_catalog(staging=False)))
 
 
+def preprocess_asset_href(parts):
+    endpoint_url = urlunsplit(parts._replace(path=""))
+    url = f"s3://{parts.path.lstrip('/')}"
+
+    return url, {"endpoint_url": endpoint_url, "anon": True}
+
+
 def fix_item(item):
     variables = item.properties.get("cube:variables")
     if variables is None:
@@ -26,6 +34,14 @@ def fix_item(item):
 
     for var in variables.values():
         var.pop("missingValue", None)
+
+    for asset in item.assets.values():
+        parts = urlsplit(asset.href)
+        if not parts.netloc.startswith("s3."):
+            continue
+
+        asset.href, storage_options = preprocess_asset_href(parts)
+        asset.extra_fields["xarray:storage_options"] = storage_options
 
     return item
 
