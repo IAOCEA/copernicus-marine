@@ -5,4 +5,6 @@ until pg_isready; do
     sleep 2
 done
 
-stac-fastapi-pgstac
+hypercorn stac_fastapi_pgstac.app:app \
+    -b "$APP_HOST:$APP_PORT" \
+    $STAC_SERVER_OPTIONS

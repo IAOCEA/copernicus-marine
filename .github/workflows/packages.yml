@@ -1,10 +1,11 @@
 name: packages
 on:
-  push:
+  release:
+    types:
+      - published
+  pull_request:
     branches:
-      - main
-    tags:
-      - "*"
+      - "main"
   workflow_dispatch:
 
 jobs:
@@ -32,6 +33,6 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: ${{ github.event_name == 'push' || github.event_name == 'release' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
